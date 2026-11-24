@@ -101,12 +101,12 @@ Changelog:
 ```markdown
 First release.
 
-- Strips every `ttf` glyph provider from resource pack font definitions before FreeType loads the
-  file, via a return injection on `FontManager#loadResourceStack`.
-- Optional server pack rejection (`blockServerResourcePacks`, off by default).
-- Startup scan that logs local packs containing `.ttf`/`.otf`/`.ttc`.
-- Config at `config/rpguard.json`; a missing or broken file falls back to the defaults without
-  crashing the client.
+- Removes custom TrueType fonts from resource packs before they are loaded, closing the
+  minecraft2shell attack path.
+- Optional: refuse server resource packs entirely (`blockServerResourcePacks`, off by default).
+- On startup, lists local packs that contain font files.
+- Settings in `config/rpguard.json`; a missing or broken file falls back to the defaults without
+  crashing the game.
 - Minecraft 26.3 only, client side, no Fabric API.
 ```
 
