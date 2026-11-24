@@ -9,7 +9,7 @@ not bundled into the jar.
 |---|---|
 | Name | Resource Pack Guard |
 | Slug | `resource-pack-guard` |
-| Summary (max 256) | Blocks the minecraft2shell exploit: `ttf` glyph providers from resource packs are stripped before FreeType loads them. Stopgap mitigation, not a replacement for an upstream fix. |
+| Summary (max 256) | Stops resource packs from using a malicious font file to run code on your computer. Client-side, Minecraft 26.3. |
 | Project type | Mod |
 | Environment | Client only (required) |
 | License | MIT |
@@ -25,56 +25,63 @@ not bundled into the jar.
 > Paste this as the project description.
 
 ```markdown
-**Resource Pack Guard** strips every `ttf` glyph provider from resource pack font definitions
-before FreeType ever sees the file. It is a stopgap for the public *minecraft2shell* proof of
-concept, where a malicious `.ttf` writes out of bounds inside FreeType and turns that into code
-execution on the client. Minecraft loads such a font the first time a glyph from it is drawn — an
-actionbar title is enough.
+A resource pack should change how your game looks, not what your game runs.
 
-The mod does not reject packs: the rest of a pack still applies, only the TrueType providers are
-dropped. Every removal is logged:
+**Resource Pack Guard** is a small client-side mod that closes a hole in how Minecraft handles
+fonts. Resource packs can ship their own font files, and those files are handed to a system library
+to be drawn. A deliberately broken font can make that library write into memory it should not
+touch, and the *minecraft2shell* proof of concept turns that into running a program on the player's
+computer. You don't have to click anything: it happens the moment a single character in that font
+appears on screen — an actionbar message is enough.
 
-```
-Removed 1 TrueType font provider(s) for font 'ctf:deferred-000' before FreeType could load them
-```
+## What the mod does
 
-The mixin sits on `FontManager#loadResourceStack`, the single place where
-`assets/<namespace>/font/*.json` is parsed, so both server packs and local packs go through it.
+It drops custom TrueType fonts from resource packs before they are ever opened. Everything else in
+the pack keeps working: textures, models, sounds, the interface. Only the font files are removed,
+and each removal is noted in the log.
 
-### Minecraft 26.3 only
+The mod runs on your client only. Servers don't need it, other players aren't affected, and
+gameplay stays exactly the same.
 
-This build targets 26.3 and nothing else. It is not remapped (26.3 ships unobfuscated) and the
-mixin targets a `private static` method. The mixin config sets `required: true` and
-`defaultRequire: 1`: on a version mismatch the game **refuses to start** instead of silently
-losing the protection. If your client will not start after a Minecraft update, that is the guard
-telling you it no longer applies — check the mixin target before disabling anything.
+## Installation
 
-### Installation
+1. Minecraft **26.3** with Fabric Loader 0.20.1 or newer and Java 25.
+2. Put the jar in your `mods` folder.
+3. Start the game.
 
-1. Minecraft 26.3 with Fabric Loader 0.20.1 or newer and Java 25.
-2. Drop `rpguard-1.0.0.jar` into `mods/`.
-3. Optional: adjust `config/rpguard.json` (created on first start).
+No Fabric API, no other dependencies.
 
-No Fabric API needed. Client side only; the mod does nothing on a server.
+## Important: 26.3 only
 
-### Configuration
+This release is built for Minecraft 26.3 and nothing else. If Minecraft updates, the mod
+deliberately refuses to start instead of quietly losing its protection. If your game won't launch
+after an update, that is the mod telling you it no longer applies — remove it or wait for a newer
+release.
 
-| Key | Default | Meaning |
-|---|---|---|
-| `blockTrueTypeFonts` | `true` | Strip every `ttf` provider before FreeType loads it. Turning this off disables the protection. |
-| `blockServerResourcePacks` | `false` | Refuse server packs outright. Off by default: servers with a required pack will not let you join while this is on. |
-| `scanLocalPacksOnStartup` | `true` | Log which packs in `resourcepacks/` contain `.ttf`/`.otf`/`.ttc`. Informational only. |
+## Settings
 
-### What it does not do
+`config/rpguard.json` is created on first start:
 
-- **Only `ttf` providers.** Bitmap, unihex and other provider types are left alone.
-- **Not a sanitiser.** It filters fonts; it does not fix FreeType. The real fix belongs upstream.
-- **Tested on Windows x64 with 26.3.** The blocking happens before the native call and is therefore
-  platform independent, but whether the exploit detonates on Linux or macOS is unverified.
+- **`blockTrueTypeFonts`** (on by default) — the actual protection. Turning this off disables the
+  mod.
+- **`blockServerResourcePacks`** (off by default) — refuse server resource packs entirely. Only
+  useful if you never need a server's pack; servers that require one won't let you join.
+- **`scanLocalPacksOnStartup`** (on by default) — on startup, note which packs in `resourcepacks/`
+  contain font files. Information only, nothing is deleted.
 
-Built and tested against a public proof of concept: without the guard 4× code execution and 1×
-native crash, with the guard 4 runs across two attack routes (server pack and a locally installed
-pack) with 144 removed providers per run, zero code execution and zero native errors.
+## Limits
+
+- Only TrueType fonts are handled; other font types are left alone.
+- This is a stopgap for one known attack path, not a fix for the underlying library.
+- Tested on Windows x64 with 26.3. The blocking happens before the font is opened, so other
+  platforms should behave the same, but I have not verified them.
+
+Technical details, source code and the full test results live on GitHub:
+<https://github.com/Milanv2l/resourcepack-guard>
+
+In testing against the public proof of concept: without the mod, 4 of 5 runs let the attacker run
+code and 1 crashed the game; with the mod, 4 runs across two delivery routes (a server pack and a
+pack installed locally) blocked all 144 malicious fonts, with no code execution and no crash.
 ```
 
 ## Release 1.0.0
