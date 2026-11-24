@@ -16,8 +16,8 @@ not bundled into the jar.
 | Categories | Utility, Management |
 | Loaders | Fabric |
 | Game versions | 26.3 (only) |
-| Source link | *(GitHub repository URL)* |
-| Issue tracker | *(GitHub repository URL + `/issues`)* |
+| Source link | https://github.com/Milanv2l/resourcepack-guard |
+| Issue tracker | https://github.com/Milanv2l/resourcepack-guard/issues |
 | Icon | `icon.png` (1024×1024) |
 
 ## Description
@@ -105,7 +105,7 @@ First release.
 
 ## Before you press publish
 
-- [ ] GitHub repository created and the source link filled in above.
+- [x] GitHub repository created and the source link filled in above.
 - [ ] `icon.png` uploaded as the project icon.
 - [ ] Game version **26.3 only** selected, not "all versions".
 - [ ] The uploaded jar is byte-identical to the tested build: SHA-256 `544339c7…6733`. Check it

@@ -125,9 +125,8 @@ unobfuscated).
 
 ## Links
 
-<!-- TODO: vul de URL's in zodra de repo bestaat -->
-- Source and issue tracker: *(GitHub-URL)*
-- Modrinth: *(Modrinth-URL)*
+- Source and issue tracker: <https://github.com/Milanv2l/resourcepack-guard>
+- Modrinth: not published yet
 
 ## License
 
