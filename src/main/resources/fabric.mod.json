@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "rpguard",
+	"version": "${version}",
+	"name": "Resource Pack Guard",
+	"description": "Blocks the Minecraft 26.3 resource-pack font exploit (minecraft2shell): TrueType/OpenType glyph providers from resource packs are refused before they reach FreeType.",
+	"authors": [
+		"Milan"
+	],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.milanv.rpguard.RpGuardClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "rpguard.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25"
+	}
+}
