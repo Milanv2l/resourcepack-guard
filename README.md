@@ -128,6 +128,13 @@ unobfuscated).
 - Source and issue tracker: <https://github.com/Milanv2l/resourcepack-guard>
 - Modrinth: not published yet
 
+## AI disclosure
+
+The mod's source code and this documentation were written with an AI coding assistant. The
+vulnerability analysis, the detonation tests against the proof of concept, and the verification of
+every claim above were done by a human on real hardware. No AI-generated images are used:
+`icon.png` is drawn from a hand-written pixel map in `tools/make-icon.py`.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

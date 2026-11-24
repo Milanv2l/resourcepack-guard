@@ -3,3 +3,4 @@ build/
 run/
 .tools/
 *.log
+__pycache__/

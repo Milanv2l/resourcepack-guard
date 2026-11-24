@@ -82,6 +82,12 @@ Technical details, source code and the full test results live on GitHub:
 In testing against the public proof of concept: without the mod, 4 of 5 runs let the attacker run
 code and 1 crashed the game; with the mod, 4 runs across two delivery routes (a server pack and a
 pack installed locally) blocked all 144 malicious fonts, with no code execution and no crash.
+### AI disclosure
+
+The mod's code and this page were written with an AI coding assistant; the analysis, the tests
+against the public proof of concept and the verification were done by a human. No AI-generated
+images are used: the icon is drawn from a hand-written pixel map in `tools/make-icon.py`.
+
 ```
 
 ## Release 1.0.0
